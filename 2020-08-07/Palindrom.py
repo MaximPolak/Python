@@ -1,6 +1,7 @@
 slovo = input("Zadejte slovo: ")
 
-if slovo == slovo[::-1]: 
-    print("JE to palindrom")
-else:
-    print("NENÍ to palindrom")
+def je_palindrom(slovo):
+    if slovo == slovo[::-1]: 
+        return True
+    else:
+        return False
