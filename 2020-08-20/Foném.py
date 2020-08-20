@@ -8,12 +8,11 @@ def je_minimalni_par(slovo1, slovo2):
         delka = len(slovo1)
         pozice = 0
         zmeny = 0
-        while pozice < delka:
+        for pozice in range(delka):
             if slovo1[pozice] != slovo2[pozice]:
                 zmeny += 1
                 if zmeny == 2:
                     return False
-            pozice += 1
         if zmeny == 1:
             return True
         else:
