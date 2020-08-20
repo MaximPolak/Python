@@ -12,17 +12,16 @@ cislo = int(input("Zadejte číslo, které chcete rozložit na prvočinitele: ")
 def rozloz_na_prvocinitele(cislo):
     prvocislo = 2
     seznam_prvocinitelu = []
-
-    while True:
+    
+    while cislo > 1:
         if cislo % prvocislo == 0:
 
             seznam_prvocinitelu.append(prvocislo)
-            cislo = cislo / prvocislo
-
-            if cislo == 1:
-                break  
+            cislo //= prvocislo
+            
         else:
             prvocislo += 1
+        
     return seznam_prvocinitelu     
 
 assert rozloz_na_prvocinitele(28) == [2, 2, 7]
