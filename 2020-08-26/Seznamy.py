@@ -8,5 +8,8 @@ seznam2 = []
 for i in range(1, 1001):
     if i % 3 == 0 or i % 5 == 0:
         seznam2.append(i)
-print(seznam2)
-    
+
+#list comprehension
+seznam3 = [i for i in range(1, 1001) if i % 3 == 0 or i % 5 == 0]
+
+print(seznam2==seznam3)
