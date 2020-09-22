@@ -17,10 +17,10 @@ def najdi_minimalni_pary(slova):
                         else:
                             lisici_se_znaky = (znak2, znak1)
                 if rozdily == 1:
-                    """
-                    if lisici_znaky not in slovnik:
-                        do knihovny přidat klíč(lisici_se_znaky)
-                    slovnik[lisici_se_znaky].append(slovo1, slovo2)
-                    """
+                    if lisici_se_znaky not in slovnik:
+                        slovnik[lisici_se_znaky] = (slovo1, slovo2)
+                    else:
+                        slovnik[lisici_se_znaky].append(slovo1, slovo2)
+                    
             
 print(najdi_minimalni_pary(slova))
