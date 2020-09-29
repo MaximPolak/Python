@@ -11,14 +11,22 @@ def bubble_sort(seznam):
     3.kolo
     1568
     """
+    puvodni_seznam = seznam
 
     for i in range(len(seznam)):
-        for aktualni_cislo in range(len(seznam) - 1):
+        for j in range(len(seznam) - 1):
 
-            if seznam[aktualni_cislo] > seznam[aktualni_cislo + 1]:
-                seznam[aktualni_cislo], seznam[aktualni_cislo + 1] = seznam[aktualni_cislo + 1], seznam[aktualni_cislo]
+            if sorted(seznam) == seznam:
+                break
 
-    return(seznam)
+            if seznam[j] > seznam[j + 1]:
+                # seznam[j], seznam[j + 1] = seznam[j + 1], seznam[j]
+                j_vetsi_kopie = seznam[j + 1]
+                j_kopie = seznam[j]
+                seznam[j] = j_vetsi_kopie
+                seznam[j + 1] = j_kopie           
+
+    return seznam
 
 seznam = [6, 5, 8, 1]
 print(bubble_sort(seznam))
