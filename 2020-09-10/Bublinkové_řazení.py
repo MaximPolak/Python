@@ -1,4 +1,5 @@
 def bubble_sort(seznam):
+    serazena_cast = []
 
     for i in range(len(seznam) - 1):
         zmeny = False
@@ -9,5 +10,6 @@ def bubble_sort(seznam):
                 zmeny = True
         if zmeny == False:
             break
-    return seznam
-
+        serazena_cast.insert(0, seznam[-1])
+        seznam.pop(-1)
+    return seznam + serazena_cast
