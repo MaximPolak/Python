@@ -24,15 +24,10 @@ class Objekt:
     def __repr__(self):
         return f"Objekt(souradnice={self.souradnice!r}, smer_i={self.smer_i!r}, rychlost={self.rychlost!r})"
     def pohni_se(self):
-        self.souradnice[0] += self.rychlost * SEZNAM_SMERU[self.smer_i].x
-        self.souradnice[1] += self.rychlost * SEZNAM_SMERU[self.smer_i].y
+        self.souradnice += self.rychlost * SEZNAM_SMERU[self.smer_i]
     def otoc_se_doprava(self):
-        self.smer_i = (1 + self.smer_i) % 3
+        self.smer_i = (self.smer_i + 1) % 4
     def otoc_se_doleva(self):
-        if self.smer_i == 0:
-            self.smer_i = 3
-        else:
-            self.smer_i = (-1 + self.smer_i )
+        self.smer_i = (self.smer_i - 1) % 4
     def obrat_se(self):
-        for i in range(2):
-            self.otoc_se_doprava()
+        self.smer_i = (self.smer_i - 2) % 4
