@@ -1,11 +1,14 @@
-def binarne_vyhledej(prvek, seznam, zacatek, konec):
-    stred = (zacatek + konec) // 2
-    
-    if zacatek > konec:
-        raise IndexError("Prvek není v daném seznamu")
-    elif prvek == seznam[stred]:
-        return stred
-    elif prvek < seznam[stred]:
-        return binarne_vyhledej(prvek, seznam, zacatek, stred - 1)
-    else:
-        return binarne_vyhledej(prvek, seznam, stred + 1, konec)
+def binarne_vyhledej(prvek, seznam):
+    def vnitrni_funkce(prvek, seznam, zacatek, konec):
+        stred = (zacatek + konec) // 2
+        
+        if zacatek > konec:
+            raise ValueError("Prvek není v daném seznamu")
+        elif prvek == seznam[stred]:
+            return stred
+        elif prvek < seznam[stred]:
+            return vnitrni_funkce(zacatek, stred - 1)
+        else:
+            return vnitrni_funkce(stred + 1, konec)
+
+    return vnitrni_funkce(prvek, seznam, 0, len(seznam) - 1)
