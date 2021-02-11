@@ -1,12 +1,9 @@
 def vraceni_prvku(*args):
-    def nekonecno():
-        i = 0
-        while True:
-            yield i
-            i += 1
-    for j in nekonecno():
-        for objekt in args:
-            try:
-                yield objekt[j]
-            except IndexError:
-                return None
+    seznam = list(iter(i) for i in args)
+
+    while True:
+        try:
+            for objekt in seznam:
+                yield next(objekt)
+        except StopIteration:
+            break
