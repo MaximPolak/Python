@@ -6,39 +6,32 @@ def passw(numDigits):
     for i in range(numDigits):
         secretNum += str(numbers[i])
     return int(secretNum)
-passw = passw(4)
+
+number_len = 4
+passw = tuple(i for i in str(passw(number_len)))
 
 on = 0
-while (on != 4):
-	on = 0
-	present = 0
-	guess=int(input("Guess the 4-digit code:"))
+while (on != number_len):
+    on = 0
+    present = 0
+    guess = str(input("Guess the 4-digit code: "))
+    guess = list(i for i in guess)
 
-	a,b,c,d = list(str(guess))
-	A,B,C,D = list(str(passw))
-	while a==b or b==c or c==d or a==c or a==d or b==d:
-		print("No digits can repeat!")
-		guess=int(input("Guess the 4-digit code:"))
-		a,b,c,d = list(str(guess))
-	if a==A:
-		on+=1
-	if b==B:
-		on+=1
-	if c==C:
-		on+=1
-	if d==D:
-		on+=1
-	if a==B or a==C or a ==D:
-		present+=1
-	if b==A or b==C or b==D:
-		present+=1
-	if c==A or c==B or c==D:
-		present+=1
-	if d==A or d==B or d==C:
-		present+=1
-	present = present
-	if on==4:
-		print("You guessed correctly!")
-	else:
-		print("Number of digits in the right place:",on)
-		print("Number of digits guessed correctly but in the wrong place:",present)
+    while len(guess) != len(set(guess)):
+        print("No digits can repeat!")
+        guess = str(input("Guess the 4-digit code: "))
+        guess = list(i for i in guess)
+
+    for x, X in zip(guess, passw):
+        if x == X:
+            on += 1
+
+    for position, number in enumerate(guess):
+        if number in passw and number != passw[position]:
+            present += 1
+
+    if on == number_len:
+	    print("You guessed correctly!")
+    else:
+	    print("Number of digits in the right place:", on)
+	    print("Number of digits guessed correctly but in the wrong place:", present)
