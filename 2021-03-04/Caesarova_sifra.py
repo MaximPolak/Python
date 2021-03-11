@@ -19,8 +19,6 @@ rozmisteni = [
 ]
 okno = sg.Window("Caesarova šifra", rozmisteni)
 
-slovnik = {}
-vystup = ""
 abeceda = string.ascii_uppercase
 
 while True:
@@ -29,19 +27,17 @@ while True:
         break
     
     posun = int(hodnoty["-POSUN-"])
-    for pozice, pismeno in enumerate(abeceda):
-        slovnik[pismeno] = abeceda[(pozice + posun) % len(abeceda)]
 
-    if udalost == "Zašifruj":
-        text = hodnoty["-FROM-"].upper()
-        for prvek in text:
-            vystup += slovnik.get(prvek, prvek)
-        okno["-TO-"].update(vystup)
+    from_ = "-FROM-"
+    to = "-TO-"    
     if udalost == "Dešifruj":
-        text = hodnoty["-TO-"].upper()
-        for prvek in text:
-            vystup += slovnik.get(prvek, prvek)
-        okno["-FROM-"].update(vystup)
-    vystup = ""
+        from_, to = to, from_
+        posun *= -1
+
+    slovnik = posun_abecedu(abeceda, posun)
+    text = hodnoty[from_].upper()
+    vystup = "".join(slovnik.get(znak, znak) for znak in text)
+
+    okno[to].update(vystup)
 
 okno.close()
