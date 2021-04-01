@@ -1,7 +1,13 @@
 from random import sample
 import os
 import time
+import enum
 import PySimpleGUI as sg
+
+class Stav(enum.Enum):
+    HRA = 0
+    VYHRA = 1
+    PROHRA = 2
 
 class Pexeso:
     def __init__(self, zadni_strana, predni_strany):
@@ -9,20 +15,20 @@ class Pexeso:
         self.zadni_strana = zadni_strana
         self.otocene = [False for _ in self.predni_strany] #[False] * len(self.predni_strany)
         self.otocene_v_tomto_kole = []
-        self.stav_hry = 0 #Hra = 0; Výhra = 1; Prohra = 2
+        self.stav_hry = Stav.HRA
         self.zbyvajici_tahy = len(self.predni_strany) // 2
     
     def otoc(self, index):
+        self.otoc_spatne_karty()
+
         if self.otocene[index]:
-            raise ValueError
-        
-        self.otoc_spatne_karty()    
+            raise ValueError    
             
         self.otocene[index] = True #pro otaceni obou stran self.otocene[index] = not self.otocene[index]
         self.otocene_v_tomto_kole.append(index)
         
         if False not in self.otocene:
-            self.stav_hry = 1
+            self.stav_hry = Stav.VYHRA
 
     def otoc_spatne_karty(self):
         if len(self.otocene_v_tomto_kole) == 2:
@@ -30,8 +36,15 @@ class Pexeso:
                 self.otocene[self.otocene_v_tomto_kole[0]] = self.otocene[self.otocene_v_tomto_kole[1]] = False
                 self.zbyvajici_tahy -= 1
                 if self.zbyvajici_tahy == 0:
-                    self.stav_hry = 2
+                    self.stav_hry = Stav.PROHRA
             self.otocene_v_tomto_kole.clear()
+
+    def podat_se(self):
+        if self.stav_hry == Stav.VYHRA:
+            raise ValueError
+        pexeso.stav_hry = Stav.PROHRA
+        for pozice, _ in enumerate(pexeso.otocene):
+            pexeso.otocene[pozice] = True
 
     @property
     def viditelne(self):
@@ -85,10 +98,15 @@ layout = [
 
 window = sg.Window("Pexeso", layout)
 
-hlasky = ["", "Vyhráli jste", "Prohráli jste"]
+hlasky = {Stav.HRA: "", Stav.VYHRA: "Vyhráli jste", Stav.PROHRA: "Prohráli jste"}
 
 while True:
     udalost, hodnoty = window.read(timeout=1000)
+
+    if pexeso.stav_hry == Stav.VYHRA:
+        window["Podat se"].update(disabled=True)
+    else:
+        window["Podat se"].update(disabled=False)
     
     pexeso.otoc_spatne_karty()
     
@@ -102,11 +120,9 @@ while True:
         pexeso = Pexeso(cesty[-1], cesty[:-1])
 
     elif udalost == "Podat se":
-        pexeso.stav_hry = 2
-        for pozice, _ in enumerate(pexeso.otocene):
-            pexeso.otocene[pozice] = True
+        pexeso.podat_se()
 
-    elif udalost != sg.TIMEOUT_KEY and pexeso.stav_hry == 0:
+    elif udalost != sg.TIMEOUT_KEY and pexeso.stav_hry == Stav.HRA:
         try:
             pexeso.otoc(udalost)
         except ValueError:
@@ -117,4 +133,5 @@ while True:
 
     for i, karta in enumerate(pexeso.viditelne):
         window[i].update(filename=karta)
+        
     
