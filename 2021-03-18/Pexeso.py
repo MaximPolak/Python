@@ -14,6 +14,7 @@ class Pexeso:
         self.predni_strany = sample(predni_strany * 2, len(predni_strany) * 2)
         self.zadni_strana = zadni_strana
         self.otocene = [False for _ in self.predni_strany] #[False] * len(self.predni_strany)
+        self.otocene_predtim = [False for _ in self.predni_strany]
         self.otocene_v_tomto_kole = []
         self.stav_hry = Stav.HRA
         self.zbyvajici_tahy = len(self.predni_strany) // 2
@@ -45,6 +46,17 @@ class Pexeso:
         pexeso.stav_hry = Stav.PROHRA
         for pozice, _ in enumerate(pexeso.otocene):
             pexeso.otocene[pozice] = True
+        
+    def najdi_zmeny(self):
+
+        zmeny = [
+            (index, predni_strana) 
+            for index, (otoceno, otoceno_predtim, predni_strana) in enumerate(zip(self.otocene, self.otocene_predtim, self.predni_strany))
+            if otoceno != otoceno_predtim
+        ] 
+        self.otocene_predtim = self.otocene
+
+        return zmeny
 
     @property
     def viditelne(self):
@@ -105,8 +117,7 @@ while True:
 
     if pexeso.stav_hry == Stav.VYHRA:
         window["Podat se"].update(disabled=True)
-    else:
-        window["Podat se"].update(disabled=False)
+        
     
     pexeso.otoc_spatne_karty()
     
@@ -117,6 +128,7 @@ while True:
         window["-CHYBA-"].update("")
 
     if udalost == "Nová hra":
+        window["Podat se"].update(disabled=False)
         pexeso = Pexeso(cesty[-1], cesty[:-1])
 
     elif udalost == "Podat se":
@@ -131,7 +143,5 @@ while True:
     window["-HLASKA-"].update(hlasky[pexeso.stav_hry])
     window["-TAHY-"].update(f"Tahy: {pexeso.zbyvajici_tahy}")    
 
-    for i, karta in enumerate(pexeso.viditelne):
+    for i, karta in pexeso.najdi_zmeny():
         window[i].update(filename=karta)
-        
-    
