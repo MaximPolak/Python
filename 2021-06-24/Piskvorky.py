@@ -25,15 +25,26 @@ class Piskvorky:
     def zjisti_vyhru(self):
         for indexy_vyhry in self.zjisti_index_moznych_vyher():
             ntice = tuple(self.hraci_plocha[radek][sloupec] for radek, sloupec in indexy_vyhry)
-            if ntice[0] != " " and ntice.count(ntice[0]) == len(ntice):
+
+            
+            if ntice[0] != " " and all(i == ntice[0] for i in ntice):
                 return ntice[0]
-        return None
+        return " "
+        
+            #if ntice[0] != " " and ntice.count(ntice[0]) == len(ntice):
+                #return ntice[0]
 
     def vepis_do_pole(self, index_pole, znak):
-        if self.hraci_plocha[index_pole[0]][index_pole[1]] == " ":
-            self.hraci_plocha[index_pole[0]][index_pole[1]] = znak
-        else:
-            raise ZvlastniError   
+        if self.hraci_plocha[index_pole[0]][index_pole[1]] != " ":
+            raise ZvlastniError
+        self.hraci_plocha[index_pole[0]][index_pole[1]] = znak
+
+    def vrat_indexy_volnych_poli(self):
+        indexy_volnych_poli = []
+        for radek, sloupec in self.indexy():
+            if self.hraci_plocha[radek][sloupec] == " ":
+                indexy_volnych_poli.append((radek, sloupec))
+        return indexy_volnych_poli
 
 """
 1 2 3           1: 2,3 ; 4,7 ; 5,9
